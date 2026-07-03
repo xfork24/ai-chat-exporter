@@ -685,7 +685,7 @@
         );
         const contentHtml = contentTarget || article;
 
-        const contentText = contentHtml.innerText.trim();
+        const contentText = contentHtml.innerText.replace(/\s+/g, " ").trim();
 
         if (!contentText) continue;
 
@@ -746,7 +746,7 @@
         if (isUser) {
           // For user messages, the entire div is the content
           messageContentHtml = item;
-          messageContentText = item.innerText.trim();
+          messageContentText = item.innerText.replace(/\s+/g, " ").trim();
         } else {
           // For Claude messages, we need to filter out "thinking" blocks
           const claudeResponseContent = document.createElement("div");
@@ -769,7 +769,7 @@
             }
           });
           messageContentHtml = claudeResponseContent;
-          messageContentText = claudeResponseContent.innerText.trim();
+          messageContentText = claudeResponseContent.innerText.replace(/\s+/g, " ").trim();
         }
 
         if (messageContentText) {
@@ -859,7 +859,7 @@
           contentHtml: isUser
             ? messageContentElem
             : messageContentElem.cloneNode(true),
-          contentText: messageContentElem.innerText.trim(),
+          contentText: messageContentElem.innerText.replace(/\s+/g, " ").trim(),
           timestamp: new Date(),
           originalIndex: chatIndex,
         });
@@ -966,7 +966,7 @@
           id: messageId, // Unique ID
           author: author,
           contentHtml: messageContentElem, // Store the direct DOM Element
-          contentText: messageContentElem.innerText.trim(),
+          contentText: messageContentElem.innerText.replace(/\s+/g, " ").trim(),
           timestamp: new Date(),
           originalIndex: chatIndex, // Keep original index for outline
         });

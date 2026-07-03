@@ -949,7 +949,25 @@
 
         if (tagName === "user-query") {
           author = "user";
-          messageContentElem = item.querySelector("p.query-text-line");
+          // Get all p.query-text-line elements and combine their text (multi-line questions)
+          const pElements = item.querySelectorAll("p.query-text-line");
+          const combinedText = Array.from(pElements)
+            .map((p) => p.innerText)
+            .join("\n");
+          messageContentElem = item; // Store full container for HTML export
+          const messageId = `${author}-${chatIndex}-${Date.now()}-${Math.random()
+            .toString(36)
+            .substring(2, 9)}`;
+          messages.push({
+            id: messageId,
+            author: author,
+            contentHtml: item, // Store full container for HTML export
+            contentText: combinedText.replace(/\s+/g, " ").trim(),
+            timestamp: new Date(),
+            originalIndex: chatIndex,
+          });
+          if (author === "ai") chatIndex++;
+          continue;
         } else if (tagName === "model-response") {
           author = "ai";
           messageContentElem = item.querySelector("message-content");

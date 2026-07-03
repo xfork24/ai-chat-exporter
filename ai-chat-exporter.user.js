@@ -949,7 +949,7 @@
 
         if (tagName === "user-query") {
           author = "user";
-          messageContentElem = item.querySelector("div.query-content");
+          messageContentElem = item.querySelector("p.query-text-line");
         } else if (tagName === "model-response") {
           author = "ai";
           messageContentElem = item.querySelector("message-content");

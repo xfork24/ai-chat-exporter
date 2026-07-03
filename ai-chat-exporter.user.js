@@ -966,9 +966,7 @@
           id: messageId, // Unique ID
           author: author,
           contentHtml: messageContentElem, // Store the direct DOM Element
-          contentText: messageContentElem.innerText
-            .replace(/^you said\s+/i, "")
-            .trim(),
+          contentText: messageContentElem.innerText.trim(),
           timestamp: new Date(),
           originalIndex: chatIndex, // Keep original index for outline
         });
@@ -1096,10 +1094,7 @@
       chatData.messages.forEach((msg) => {
         if (msg.author === "user") {
           exportChatIndex++; // Increment only for user messages
-          const preview = Utils.truncate(
-            msg.contentText.replace(/\s+/g, " "),
-            70
-          );
+          const preview = msg.contentText.replace(/\s+/g, " ");
           toc += `- [${exportChatIndex}: ${Utils.escapeMd(
             preview
           )}](#chat-${exportChatIndex})\n`;

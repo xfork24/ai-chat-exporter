@@ -386,7 +386,7 @@
   // --- Markdown Formatting Constants ---
   const DEFAULT_CHAT_TITLE = "chat";
   const MARKDOWN_TOC_PLACEHOLDER_LINK = "#table-of-contents";
-  const MARKDOWN_BACK_TO_TOP_LINK = `___\n###### [top](${MARKDOWN_TOC_PLACEHOLDER_LINK})\n`;
+  const MARKDOWN_BACK_TO_TOP_LINK = `___\n###### [[#Table of Contents|top]]\n`;
 
   // Parents of <p> tags where newlines should be suppressed or handled differently
   // LI is handled separately in the paragraph rule for single newlines.
@@ -1120,7 +1120,6 @@
           }
           content += markdownContent + "\n\n" + MARKDOWN_BACK_TO_TOP_LINK;
         }
-        // Removed the incorrect increment logic from here
       });
 
       const localTime = Utils.formatLocalTime(chatData.exportedAt);
@@ -1128,13 +1127,11 @@
       const yaml = `---\ntitle: "${chatData.title.replaceAll(
         '"',
         '\\"'
-      )}"\ntags: [${chatData.tags.join(", ")}]\nauthor: ${
+      )}"\nsource: ${chatData.threadUrl}\nauthor: ${
         chatData.author
       }\ncount: ${
         chatData.messageCount
-      }\nexporter: ${EXPORTER_VERSION}\ndate: ${localTime}\nurl: ${
-        chatData.threadUrl
-      }\n---\n`;
+      }\nexporter: ${EXPORTER_VERSION}\npublished: ${localTime}\ncreated: ${localTime}\n---\n`;
       const tocBlock = `## Table of Contents\n\n${toc.trim()}\n\n`;
 
       const finalOutput =
@@ -1176,14 +1173,14 @@
       };
       const jsonOutput = {
         title: chatData.title,
-        tags: chatData.tags,
+        source: chatData.threadUrl,
         author: chatData.author,
         count: chatData.messageCount,
         exporter: EXPORTER_VERSION,
-        date: chatData.exportedAt.toISOString(),
-        url: chatData.threadUrl,
+        published: chatData.exportedAt.toISOString(),
+        created: chatData.exportedAt.toISOString(),
         messages: chatData.messages.map((msg) => ({
-          id: msg.id.split("-").slice(0, 2).join("-"), // Keep the ID for reference in JSON
+          id: msg.id.split("-").slice(0, 2).join("-"),
           author: msg.author,
           content: processMessageContent(msg),
         })),
